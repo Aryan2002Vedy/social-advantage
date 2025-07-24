@@ -1,10 +1,16 @@
-require('dotenv').config();
-const path = require('path'); 
 const fs = require('fs');
-const targetPath = path.join(__dirname, '../src/environments/environment.ts');
+const path = require('path');
+require('dotenv').config();
 
-const envConfig = `
-export const environment = {
+const envDir = path.join(__dirname, '../src/environments');
+const targetPath = path.join(envDir, 'environment.ts');
+
+// ✅ Ensure the folder exists
+if (!fs.existsSync(envDir)) {
+  fs.mkdirSync(envDir, { recursive: true });
+}
+
+const envFileContent = `export const environment = {
   production: true,
   firebase: {
     apiKey: '${process.env.NG_APP_FIREBASE_API_KEY}',
@@ -14,8 +20,7 @@ export const environment = {
     messagingSenderId: '${process.env.NG_APP_FIREBASE_MESSAGING_SENDER_ID}',
     appId: '${process.env.NG_APP_FIREBASE_APP_ID}'
   }
-};
-`;
+};`;
 
-fs.writeFileSync(targetPath, envConfig);
+fs.writeFileSync(targetPath, envFileContent);
 console.log('✅ Environment.ts file generated successfully');
