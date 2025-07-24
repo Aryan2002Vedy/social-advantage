@@ -1,0 +1,35 @@
+
+html {
+  scroll-behavior: smooth;
+}
+body {
+  --card-bg: #1e2d3d;
+  --text-color: #ffffff;
+  --box-shadow: 0 4px 8px rgba(0, 255, 255, 0.1);
+  --placeholder-color: rgba(255, 255, 255, 0.6);
+
+  background-color: #0f2027;
+  color: white;
+  transition: 0.3s ease;
+  margin: 0;
+  padding: 0;
+}
+
+body.light-theme {
+  --card-bg: #ffffff;
+  --text-color: #000000;
+  --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --placeholder-color: rgba(0, 0, 0, 0.5);
+
+  background-color: #ffffff;
+  color: #222;
+
+  .navbar a {
+    color: #0f2027 !important;
+  }
+
+  .cta-btn {
+    background-color: #0f2027 !important;
+    color: white;
+  }
+}

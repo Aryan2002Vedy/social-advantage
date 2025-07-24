@@ -1,0 +1,146 @@
+<nav class="navbar" [class.open]="navOpen">
+  <div class="nav-logo">Social Advantage</div>
+
+  <ul class="nav-links" [class.active]="navOpen">
+    <li><a href="#home" (click)="closeNav()">Home</a></li>
+    <li><a href="#services" (click)="closeNav()">Services</a></li>
+    <li><a href="#funnels" (click)="closeNav()">Funnels</a></li>
+    <li><a href="#contact" (click)="closeNav()">Contact Us</a></li>
+
+    <!-- Theme Toggle inside hamburger for mobile -->
+    <li class="mobile-toggle">
+      <button (click)="toggleTheme()">
+        {{ isDark ? '🌞 Light Mode' : '🌙 Dark Mode' }}
+      </button>
+    </li>
+  </ul>
+
+  <!-- Right side for desktop -->
+  <div class="navbar-right">
+    <!-- This one will be hidden on mobile -->
+    <div class="theme-toggle desktop-only">
+      <button (click)="toggleTheme()">
+        {{ isDark ? '🌞 Light Mode' : '🌙 Dark Mode' }}
+      </button>
+    </div>
+
+    <div class="hamburger" (click)="toggleNav()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+</nav>
+
+<section id="home" class="hero-section">
+
+  <div class="hero-container">
+    <!-- Left: Text content -->
+    <div class="hero-left" data-aos="fade-right">
+      <h1>{{ 'hero.title' | translate }}</h1>
+      <p>{{ 'hero.subtitle' | translate }}</p>
+      <button class="cta-btn" (click)="scrollToContact()">{{ 'hero.cta' | translate }}</button>
+    </div>
+
+    <!-- Right: Lottie animation -->
+    <div class="hero-right" data-aos="fade-left">
+      <ng-lottie [options]="heroLottieOptions" class="hero-lottie"></ng-lottie>
+    </div>
+  </div>
+
+  <div class="particles">
+    <span *ngFor="let dot of [].constructor(50)"></span>
+  </div>
+</section>
+
+
+<section id="services" class="services-section" data-aos="fade-up">
+  <h2 class="section-title">Our Services</h2>
+  <div class="services-grid">
+    <div class="service-card" *ngFor="let service of services">
+      <ng-lottie [options]="service.lottieOptions" width="120px" height="120px"
+        (animationCreated)="service.animation = $event" class="lottie-animation"></ng-lottie>
+      <h3>{{ service.title }}</h3>
+      <p>{{ service.description }}</p>
+    </div>
+  </div>
+</section>
+
+<section id="funnels" class="funnels-section" data-aos="fade-up">
+  <h2 class="section-title">Funnels That Convert</h2>
+
+  <!-- Desktop -->
+  <div class="funnels-timeline desktop-only">
+    <div class="funnel-step" *ngFor="let step of funnelSteps; let i = index">
+      <div class="icon-circle">
+        <img [src]="step.icon" alt="Step Icon" />
+        <span class="step-number">{{ i + 1 }}</span>
+      </div>
+      <h3>{{ step.title }}</h3>
+      <p>{{ step.description }}</p>
+      <div class="connector" *ngIf="i < funnelSteps.length - 1"></div>
+    </div>
+  </div>
+
+  <!-- Mobile -->
+  <swiper-container class="funnels-swiper mobile-only" slides-per-view="1.2" space-between="20" pagination="true"
+    centered-slides="true">
+    <swiper-slide *ngFor="let step of funnelSteps; let i = index">
+      <div class="funnel-step">
+        <div class="icon-circle">
+          <img [src]="step.icon" alt="Step Icon" />
+          <span class="step-number">{{ i + 1 }}</span>
+        </div>
+        <h3>{{ step.title }}</h3>
+        <p>{{ step.description }}</p>
+      </div>
+    </swiper-slide>
+  </swiper-container>
+</section>
+
+
+
+<!-- CONTACT -->
+
+<section id="contact" class="contact-section" data-aos="fade-up">
+  <h2 class="section-title">Let's Talk</h2>
+
+  <div class="contact-container">
+    <form [formGroup]="form" class="contact-form" (ngSubmit)="submitForm()" novalidate>
+      <div class="form-group">
+        <input type="text" formControlName="name" placeholder="Your Name" name="name" required />
+        <div *ngIf="showError('name')" class="error-msg">Name is required</div>
+      </div>
+      <div class="form-group">
+        <input formControlName="phone" placeholder="Phone Number" required />
+        <div *ngIf="showError('phone')" class="error-msg">
+          <div *ngIf="form.get('phone')?.errors?.['required']">Phone number is required</div>
+          <div *ngIf="form.get('phone')?.errors?.['pattern']">Phone number must be 10 digits</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <select formControlName="interest">
+        <option value="">Select Area of Interest</option>
+        <option value="meta">Meta Ads</option>
+        <option value="crm">CRM Integration</option>
+        <option value="landing">Landing Page</option>
+      </select>
+      <div *ngIf="showError('interest')" class="error-msg">
+        Please select an area of interest
+      </div>
+      </div>
+      <div class="form-group">
+        <textarea formControlName="message" rows="4" placeholder="Your Message (optional)" required></textarea>
+      </div>
+      <button class="send-btn" type="submit"> Send Message</button>
+       <!-- Success -->
+      <div *ngIf="submitted" class="success-msg">
+        Thanks! We'll reach out to you shortly.
+      </div>
+    </form>
+
+    <div class="contact-lottie">
+      <ng-lottie [options]="contactLottieOptions" class="contact-animation"></ng-lottie>
+    </div>
+  </div>
+</section>

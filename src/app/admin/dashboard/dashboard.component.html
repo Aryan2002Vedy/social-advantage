@@ -1,0 +1,85 @@
+<!-- logout should be here, outside -->
+<button class="logout-btn" (click)="logout()">Logout</button>
+
+<div class="dashboard-wrapper">
+  <h2>Leads Dashboard</h2>
+
+  <!-- 🔄 Reworked filter panel -->
+  <div class="filter-container">
+    <!-- 🟦 Column 1: Interest Dropdown -->
+    <div class="filter-col">
+      <label>Interest:</label>
+      <select [(ngModel)]="selectedInterest" (change)="applyFilter()">
+        <option value="">All Interests</option>
+        <option value="meta">Meta Ads</option>
+        <option value="crm">CRM Integration</option>
+        <option value="landing">Landing Page</option>
+      </select>
+    </div>
+
+    <!-- 🟨 Column 2: Date Filter -->
+    <div class="filter-col">
+      <label>Filter by Date:</label>
+      <div class="date-range">
+        <input type="date" [(ngModel)]="startDate" (change)="applyFilter()" />
+        <span>to</span>
+        <input type="date" [(ngModel)]="endDate" (change)="applyFilter()" />
+      </div>
+    </div>
+
+    <!-- 🟥 Column 3: Export Buttons -->
+    <div class="filter-col export-actions">
+      <button class="export-btn" (click)="exportToCSV()">Export CSV</button>
+      <button class="export-btn" (click)="exportToPDF()">Export PDF</button>
+    </div>
+  </div>
+  <table *ngIf="paginatedLeads().length > 0">
+    <thead>
+      <tr>
+        <th (click)="sortBy('name')">Name ⬍</th>
+        <th (click)="sortBy('phone')">Phone ⬍</th>
+        <th (click)="sortBy('interest')">Interest ⬍</th>
+        <th (click)="sortBy('date')">Date ⬍</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let lead of paginatedLeads()">
+        <td>{{ lead.name }}</td>
+        <td>{{ lead.phone }}</td>
+        <td>{{ lead.interest }}</td>
+        <td>{{ lead.date | date: 'dd MMM yyyy, hh:mm a' }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <p *ngIf="filteredLeads.length === 0" class="no-data">No leads to show.</p>
+  <div class="pagination">
+    <button (click)="prevPage()" [disabled]="currentPage === 1">← Prev</button>
+    <span>Page {{ currentPage }} of {{ totalPages }}</span>
+    <button (click)="nextPage()" [disabled]="currentPage === totalPages">Next →</button>
+  </div>
+
+  <!-- Charts  -->
+<div class="charts-wrapper">
+
+  <!-- BAR -->
+  <div class="chart-container">
+    <canvas baseChart
+      [data]="barChartData"
+      [type]="barChartType"
+      [options]="barChartOptions">
+    </canvas>
+  </div>
+
+  <!-- PIE -->
+  <div class="chart-container">
+    <canvas baseChart
+      [data]="pieChartData"
+      [type]="pieChartType"
+      [options]="pieChartOptions">
+    </canvas>
+  </div>
+
+  
+</div>
+
+ 
